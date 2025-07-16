@@ -1,0 +1,11 @@
+plugins {
+    id "com.android.application" version "8.11.1" apply false
+}
+
+allprojects {
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+    }
+}
