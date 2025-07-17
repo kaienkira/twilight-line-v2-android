@@ -1,2 +1,6 @@
-.gradle
-build
+/.gradle/
+/build
+/app/build
+/app/src/main/assets/config/tl-client/*.json
+/app/src/main/jniLibs/arm64-v8a/libtlclient.so
+/app/src/main/jniLibs/x86_64/libtlclient.so

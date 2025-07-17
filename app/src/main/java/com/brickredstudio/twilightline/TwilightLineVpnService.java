@@ -2,8 +2,6 @@ package com.brickredstudio.twilightline;
 
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.net.LocalSocket;
-import android.net.LocalSocketAddress;
 import android.net.VpnService;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,7 +13,7 @@ import android.os.ParcelFileDescriptor;
 import android.text.TextUtils;
 import android.util.Log;
 import androidx.core.app.NotificationCompat;
-import java.io.FileDescriptor;
+import engine.Engine;
 
 public class TwilightLineVpnService extends VpnService
 {
@@ -26,7 +24,6 @@ public class TwilightLineVpnService extends VpnService
 
     private static final int VPN_MTU = 1500;
     private static final String VPN_TUN_DEVICE_IPV4 = "172.27.0.1";
-    private static final String VPN_TUN_ROUTER_IPV4 = "172.27.0.2";
 
     private Messenger selfMessenger = null;
     private Messenger clientMessenger = null;
@@ -100,6 +97,10 @@ public class TwilightLineVpnService extends VpnService
             Log.e(App.TAG, "start tlclient failed");
             return;
         }
+        if (startTun2Socks() == false) {
+            Log.e(App.TAG, "start tun2socks failed");
+            return;
+        }
 
         Message response = Message.obtain();
         response.what = TwilightLineVpnService.MESSAGE_START_PROXY_RESPONSE;
@@ -113,6 +114,7 @@ public class TwilightLineVpnService extends VpnService
 
     private void onMessageStopProxyRequest(Message request)
     {
+        stopTun2Socks();
         stopTwilightLineClient();
         stopVpnService();
 
@@ -226,5 +228,26 @@ public class TwilightLineVpnService extends VpnService
             }
             this.twilightLineClientProcess = null;
         }
+    }
+
+    private boolean startTun2Socks()
+    {
+        engine.Key key = new engine.Key();
+        key.setDevice("fd://" + vpnFileDescriptor.getFd());
+        key.setProxy("socks5://127.0.0.1:9051");
+
+        engine.Engine.insert(key);
+        engine.Engine.start();
+        // vpn fd owner transfer to tun2socks
+        // prevent double free here
+        this.vpnFileDescriptor.detachFd();
+        this.vpnFileDescriptor = null;
+
+        return true;
+    }
+
+    private void stopTun2Socks()
+    {
+        engine.Engine.stop();
     }
 }
