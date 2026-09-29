@@ -13,5 +13,5 @@ cd "$tun2socks_dir"
 go get golang.org/x/mobile/bind
 gomobile init
 gomobile bind -o ./tun2socks.aar \
-    -target android/arm64,android/amd64 -androidapi 21 "$tun2socks_dir"/engine
+    -target android/arm64,android/amd64 -androidapi 23 "$tun2socks_dir"/engine
 ```

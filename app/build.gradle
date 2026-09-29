@@ -7,16 +7,16 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
-    compileSdkVersion 36
-    buildToolsVersion "36.1.0"
+    compileSdkVersion 37
+    buildToolsVersion "37.0.0"
     namespace "com.brickredstudio.twilightline"
 
     defaultConfig {
         applicationId "com.brickredstudio.twilightline"
-        minSdkVersion 21
-        targetSdkVersion 36
+        minSdkVersion 23
+        targetSdkVersion 37
         versionCode 1
-        versionName "0.1.0"
+        versionName "0.1.1"
 
         manifestPlaceholders = [
             appName: "Twilight Line"
@@ -43,8 +43,8 @@ android {
     }
 
     dependencies {
-        implementation "androidx.appcompat:appcompat:1.7.1"
-        implementation "androidx.fragment:fragment:1.8.9"
+        implementation "androidx.appcompat:appcompat:1.8.0"
+        implementation "androidx.fragment:fragment:1.9.1"
         implementation "androidx.recyclerview:recyclerview:1.4.0"
         implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.1.21"))
         implementation(name: "tun2socks", ext: "aar")
@@ -53,6 +53,12 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+    }
+
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
     }
 
     lintOptions {

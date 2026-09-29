@@ -237,7 +237,10 @@ public class TwilightLineVpnService extends VpnService
         key.setProxy("socks5://127.0.0.1:9051");
 
         engine.Engine.insert(key);
-        engine.Engine.start();
+        try {
+            engine.Engine.start();
+        } catch (Exception e) {
+        }
         // vpn fd owner transfer to tun2socks
         // prevent double free here
         this.vpnFileDescriptor.detachFd();
@@ -248,6 +251,9 @@ public class TwilightLineVpnService extends VpnService
 
     private void stopTun2Socks()
     {
-        engine.Engine.stop();
+        try {
+            engine.Engine.stop();
+        } catch (Exception e) {
+        }
     }
 }
