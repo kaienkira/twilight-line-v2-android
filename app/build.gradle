@@ -7,16 +7,16 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
-    compileSdkVersion 37
-    buildToolsVersion "37.0.0"
-    namespace "com.brickredstudio.twilightline"
+    compileSdk = 37
+    buildToolsVersion = "37.0.0"
+    namespace = "com.brickredstudio.twilightline"
 
     defaultConfig {
-        applicationId "com.brickredstudio.twilightline"
-        minSdkVersion 23
-        targetSdkVersion 37
-        versionCode 1
-        versionName "0.1.1"
+        applicationId = "com.brickredstudio.twilightline"
+        minSdk  = 23
+        targetSdk = 37
+        versionCode = 1
+        versionName = "0.1.1"
 
         manifestPlaceholders = [
             appName: "Twilight Line"
@@ -25,46 +25,48 @@ android {
 
     signingConfigs {
         release {
-            v1SigningEnabled true
-            v2SigningEnabled true
-            storeFile project.file("key/android.keystore")
-            storePassword keystoreProperties["storePassword"]
-            keyAlias keystoreProperties["keyAlias"]
-            keyPassword keystoreProperties["keyPassword"]
+            enableV1Signing = true
+            enableV2Signing = true
+            storeFile = project.file("key/android.keystore")
+            storePassword = keystoreProperties["storePassword"]
+            keyAlias = keystoreProperties["keyAlias"]
+            keyPassword = keystoreProperties["keyPassword"]
         }
     }
 
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
-            signingConfig signingConfigs.release
+            minifyEnabled = true
+            shrinkResources = true
+            signingConfig = signingConfigs.release
         }
     }
 
-    dependencies {
-        implementation "androidx.appcompat:appcompat:1.8.0"
-        implementation "androidx.fragment:fragment:1.9.1"
-        implementation "androidx.recyclerview:recyclerview:1.4.0"
-        implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.1.21"))
-        implementation(name: "tun2socks", ext: "aar")
-    }
-
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
-    packagingOptions {
+    packaging {
         jniLibs {
             useLegacyPackaging = true
         }
     }
 
-    lintOptions {
-        disable "GoogleAppIndexingWarning",
-                "IconMissingDensityFolder",
-                "ObsoleteLintCustomCheck",
-                "SetTextI18n"
+    lint {
+        disable += [
+            "GoogleAppIndexingWarning",
+            "IconMissingDensityFolder",
+            "ObsoleteLintCustomCheck",
+            "SetTextI18n"
+        ]
     }
+}
+
+dependencies {
+    implementation "androidx.appcompat:appcompat:1.8.0"
+    implementation "androidx.fragment:fragment:1.9.1"
+    implementation "androidx.recyclerview:recyclerview:1.4.0"
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.1.21"))
+    implementation(files("libs/tun2socks.aar"))
 }
