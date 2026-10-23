@@ -4,7 +4,17 @@ plugins {
 
 def keystorePropertiesFile = project.file("key/keystore.properties")
 def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+keystorePropertiesFile.withInputStream({ stream ->
+    keystoreProperties.load(stream)
+})
+
+dependencies {
+    implementation "androidx.appcompat:appcompat:1.8.0"
+    implementation "androidx.fragment:fragment:1.9.1"
+    implementation "androidx.recyclerview:recyclerview:1.4.0"
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.1.21"))
+    implementation(files("libs/tun2socks.aar"))
+}
 
 android {
     compileSdk = 37
@@ -61,12 +71,4 @@ android {
             "SetTextI18n"
         ]
     }
-}
-
-dependencies {
-    implementation "androidx.appcompat:appcompat:1.8.0"
-    implementation "androidx.fragment:fragment:1.9.1"
-    implementation "androidx.recyclerview:recyclerview:1.4.0"
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.1.21"))
-    implementation(files("libs/tun2socks.aar"))
 }
